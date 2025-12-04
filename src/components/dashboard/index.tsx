@@ -11,7 +11,7 @@ const Dashboard: React.FC = () => {
     async function fetchRfps() {
       try {
         const res = await getRfpList(1, 4); // returns 3 items
-        setRfps(res.documents);
+        setRfps(res.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -43,7 +43,7 @@ const Dashboard: React.FC = () => {
             <p className="text-gray-500">Loading…</p>
           ) : (
             <ul className="space-y-4">
-              {rfps.map((rfp) => (
+              {rfps?.map((rfp) => (
                 <li
                   key={rfp.rfp_id}
                   className="border rounded-lg p-4 hover:bg-gray-50 transition"

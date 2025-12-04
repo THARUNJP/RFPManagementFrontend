@@ -45,5 +45,6 @@ export interface CreateRfpResponse {
 export interface GetRfpListResponse {
   status: boolean;
   message: string;
-  documents: RfpDocument[];
+  data: RfpDocument[];
+  total:number;
 }
