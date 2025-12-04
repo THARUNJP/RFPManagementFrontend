@@ -43,7 +43,6 @@ const Dashboard: React.FC = () => {
 
       {/* Responsive Layout */}
       <div className="flex flex-col md:flex-row gap-8 justify-center">
-
         {/* ------------------ LEFT: RFP LIST ------------------ */}
         <div className="bg-white shadow-lg rounded-xl p-6 w-full md:w-1/2 max-w-3xl">
           <div className="flex items-center justify-between mb-6">
@@ -66,13 +65,15 @@ const Dashboard: React.FC = () => {
                     key={rfp.rfp_id}
                     className="border rounded-lg p-4 hover:bg-gray-50 transition"
                   >
-                    <h3 className="text-lg font-semibold">{rfp.title}</h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Budget: ${rfp.budget}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Created: {new Date(rfp.created_at).toLocaleDateString()}
-                    </p>
+                    <Link to={`/rfp/${rfp.rfp_id}`} className="block">
+                      <h3 className="text-lg font-semibold">{rfp.title}</h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Budget: ${rfp.budget}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        Created: {new Date(rfp.created_at).toLocaleDateString()}
+                      </p>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -113,11 +114,19 @@ const Dashboard: React.FC = () => {
                     key={vendor.vendor_id}
                     className="border rounded-lg p-4 hover:bg-gray-50 transition"
                   >
-                    <h3 className="text-lg font-semibold">{vendor.name}</h3>
-                    <p className="text-sm text-gray-600">{vendor.contact_email}</p>
-                    <p className="text-xs text-gray-400 mt-1">
-                      Created: {new Date(vendor.created_at).toLocaleDateString()}
-                    </p>
+                    <Link
+                      to={`/vendor/${vendor.vendor_id}`}
+                      className="block" // makes the whole li clickable
+                    >
+                      <h3 className="text-lg font-semibold">{vendor.name}</h3>
+                      <p className="text-sm text-gray-600">
+                        {vendor.contact_email}
+                      </p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        Created:{" "}
+                        {new Date(vendor.created_at).toLocaleDateString()}
+                      </p>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -135,7 +144,6 @@ const Dashboard: React.FC = () => {
             </Link>
           </div>
         </div>
-
       </div>
     </div>
   );

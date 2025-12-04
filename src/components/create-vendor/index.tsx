@@ -20,7 +20,7 @@ export default function CreateVendor() {
   const onSubmit = async (data: CreateVendorForm) => {
     try {
       setLoading(true);
-      const res = await createVendor(data);
+      await createVendor(data);
 
       alert("Vendor created successfully!");
 
