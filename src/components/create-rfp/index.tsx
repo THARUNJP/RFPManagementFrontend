@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 interface StructuredRFP {
+  title: string;
+  description: string;
   items: { type: string; quantity: number; specs: string }[];
   budget: number;
   delivery_timeline: string;
@@ -21,23 +23,36 @@ const CreateRFP: React.FC = () => {
       return;
     }
 
-    setError("");
     setLoading(true);
+    setError("");
 
     try {
-      // Call backend AI API
-      const response = await fetch("/rfps/ai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description }),
-      });
+      const example: StructuredRFP = {
+        title,
+        description,
+        items: [
+          {
+            type: "Laptop",
+            quantity: 10,
+            specs: "Intel i7, 16GB RAM, 512GB SSD",
+          },
+          {
+            type: "Monitor",
+            quantity: 10,
+            specs: "24-inch FHD IPS Display",
+          },
+        ],
+        budget: 250000,
+        delivery_timeline: "Within 15 days from PO",
+        payment_terms: "50% advance, 50% after delivery",
+        warranty: "1-year onsite warranty for all items",
+      };
 
-      if (!response.ok) throw new Error("Failed to generate RFP.");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      const data: StructuredRFP = await response.json();
-      setGeneratedRFP(data);
-    } catch (err: any) {
-      setError(err.message || "Something went wrong.");
+      setGeneratedRFP(example);
+    } catch {
+      setError("Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -63,7 +78,7 @@ const CreateRFP: React.FC = () => {
           onChange={(e) => setDescription(e.target.value)}
           rows={6}
           className="w-full p-3 border rounded mb-4"
-          placeholder="Describe your procurement needs in natural language..."
+          placeholder="Describe your procurement needs…"
         />
 
         {error && <p className="text-red-600 mb-4">{error}</p>}
@@ -79,10 +94,50 @@ const CreateRFP: React.FC = () => {
 
       {generatedRFP && (
         <div className="bg-gray-50 p-6 rounded shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Generated RFP JSON</h2>
-          <pre className="overflow-x-auto bg-white p-4 rounded border">
-            {JSON.stringify(generatedRFP, null, 2)}
-          </pre>
+          <h2 className="text-xl font-semibold mb-4">Generated RFP Details</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p className="mb-2">
+                <span className="font-semibold">Title:</span> {generatedRFP.title}
+              </p>
+              <p className="mb-2">
+                <span className="font-semibold">Description:</span>{" "}
+                {generatedRFP.description}
+              </p>
+
+              <p className="mb-2 font-semibold">Items:</p>
+              <ul className="ml-4 mb-2 list-disc">
+                {generatedRFP.items.map((item, i) => (
+                  <li key={i}>
+                    {item.type}: qty {item.quantity}, {item.specs}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <p className="mb-2">
+                <span className="font-semibold">Budget:</span> ₹
+                {generatedRFP.budget.toLocaleString()}
+              </p>
+
+              <p className="mb-2">
+                <span className="font-semibold">Delivery Timeline:</span>{" "}
+                {generatedRFP.delivery_timeline}
+              </p>
+
+              <p className="mb-2">
+                <span className="font-semibold">Payment Terms:</span>{" "}
+                {generatedRFP.payment_terms}
+              </p>
+
+              <p className="mb-2">
+                <span className="font-semibold">Warranty:</span>{" "}
+                {generatedRFP.warranty}
+              </p>
+            </div>
+          </div>
         </div>
       )}
     </div>
