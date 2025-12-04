@@ -46,5 +46,22 @@ export interface GetRfpListResponse {
   status: boolean;
   message: string;
   data: RfpDocument[];
-  total:number;
+  total: number;
+}
+
+export interface Vendor {
+  vendor_id: string;
+  name: string;
+  contact_email: string;
+  phone: string;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+}
+
+export interface GetVendorListResponse {
+  status: boolean;
+  message: string;
+  data: Vendor[];
+  total: number;
 }
