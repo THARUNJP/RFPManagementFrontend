@@ -20,3 +20,10 @@ export async function getRfpList(
   );
   return res.data;
 }
+
+export async function getRfpById(
+  rfpId: string
+): Promise<CreateRfpResponse> {
+  const res = await api.get<CreateRfpResponse>(`/api/v1/rfp/${rfpId}`);
+  return res.data;
+}
