@@ -38,8 +38,13 @@ export const ShareRfpModal: React.FC<ShareRfpModalProps> = ({
 
   // Fetch initial vendors (empty search)
   useEffect(() => {
-    if (isOpen) fetchVendors("");
-  }, [isOpen]);
+  if (!isOpen) {
+    setSearch("");
+    setSelectedVendors([]);
+    setVendors([]);
+    setLoading(false);
+  }
+}, [isOpen]);
 
   if (!isOpen) return null;
 

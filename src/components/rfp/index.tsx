@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { RfpDocument, Vendor } from "../../types/types";
-import { getRfpById } from "../../service/rfp.service";
+import { getRfpById, sendRfpToVendor } from "../../service/rfp.service";
 import { ShareRfpModal } from "../../lib/modal";
 
 const RfpDetails: React.FC = () => {
@@ -25,9 +25,30 @@ const RfpDetails: React.FC = () => {
 
     fetchRfp();
   }, [id]);
-const handleOnShare = useCallback((selectedVendors: Vendor[]) => {
-  console.log(selectedVendors);
-}, []);
+  const handleOnShare = useCallback(
+    async (selectedVendors: Vendor[]) => {
+      if (!id) return;
+      try {
+        setLoading(true);
+
+        const response = await sendRfpToVendor(id, selectedVendors);
+
+        // TODO: Replace with toast success
+        alert(response.message || "Emails sent successfully");
+
+        setIsShareOpen(false); // close modal after sending
+      } catch (error) {
+        console.error("Error sending email to vendors:", error);
+
+        // TODO: Replace with toast error
+        alert("Something went wrong while sending emails");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [id] // important — needs 'id'
+  );
+
   if (loading) {
     return <p className="p-10 text-gray-500">Loading RFP…</p>;
   }
@@ -35,7 +56,6 @@ const handleOnShare = useCallback((selectedVendors: Vendor[]) => {
   if (!rfp) {
     return <p className="p-10 text-red-500">RFP not found.</p>;
   }
-
 
   return (
     <div className="min-h-screen p-10 flex justify-center">
@@ -81,7 +101,7 @@ const handleOnShare = useCallback((selectedVendors: Vendor[]) => {
         <ShareRfpModal
           isOpen={isShareOpen}
           onClose={() => setIsShareOpen(false)}
-          onShare={(selected) =>handleOnShare(selected)}
+          onShare={(selected) => handleOnShare(selected)}
         />
 
         {/* Share Button */}
