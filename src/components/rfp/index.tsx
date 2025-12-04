@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { RfpDocument } from "../../types/types";
+import type { RfpDocument, Vendor } from "../../types/types";
 import { getRfpById } from "../../service/rfp.service";
 import { ShareRfpModal } from "../../lib/modal";
 
@@ -25,7 +25,9 @@ const RfpDetails: React.FC = () => {
 
     fetchRfp();
   }, [id]);
-
+const handleOnShare = useCallback((selectedVendors: Vendor[]) => {
+  console.log(selectedVendors);
+}, []);
   if (loading) {
     return <p className="p-10 text-gray-500">Loading RFP…</p>;
   }
@@ -33,6 +35,7 @@ const RfpDetails: React.FC = () => {
   if (!rfp) {
     return <p className="p-10 text-red-500">RFP not found.</p>;
   }
+
 
   return (
     <div className="min-h-screen p-10 flex justify-center">
@@ -78,11 +81,7 @@ const RfpDetails: React.FC = () => {
         <ShareRfpModal
           isOpen={isShareOpen}
           onClose={() => setIsShareOpen(false)}
-          // vendors={vendors}
-          onShare={(selected) => {
-            console.log("Sharing with:", selected);
-            setIsShareOpen(false);
-          }}
+          onShare={(selected) =>handleOnShare(selected)}
         />
 
         {/* Share Button */}

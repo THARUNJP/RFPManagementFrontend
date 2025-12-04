@@ -27,7 +27,7 @@ export const ShareRfpModal: React.FC<ShareRfpModalProps> = ({
     }
   };
 
-  // ▶ Debounce search
+  //  Debounce search
   useEffect(() => {
     const delay = setTimeout(() => {
       fetchVendors(search);
