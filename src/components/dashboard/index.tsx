@@ -96,7 +96,7 @@ const Dashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-medium">Vendors</h2>
             <Link
-              to="/vendors/create"
+              to="/vendor/create"
               className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
             >
               Add Vendor
