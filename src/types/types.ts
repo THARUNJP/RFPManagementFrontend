@@ -41,3 +41,9 @@ export interface CreateRfpResponse {
   message: string;
   document: RfpDocument;
 }
+
+export interface GetRfpListResponse {
+  status: boolean;
+  message: string;
+  documents: RfpDocument[];
+}
