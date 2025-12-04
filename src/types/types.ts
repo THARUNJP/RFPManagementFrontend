@@ -83,3 +83,9 @@ export interface ShareRfpModalProps {
   onClose: () => void;
   onShare: (selected: Vendor[]) => void;
 }
+
+export interface SendRfpToVendorPayload {
+  status: boolean;
+  message: string;
+  rfp_id: string;
+}
