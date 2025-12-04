@@ -65,3 +65,14 @@ export interface GetVendorListResponse {
   data: Vendor[];
   total: number;
 }
+export interface CreateVendorPayload {
+  name: string;
+  contact_email: string;
+  phone: string;
+}
+
+export interface CreateVendorResponse {
+  status: boolean;
+  message: string;
+  data: Vendor;
+}
