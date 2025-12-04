@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { RfpDocument } from "../../types/types";
 import { getRfpById } from "../../service/rfp.service";
-
+import { ShareRfpModal } from "../../lib/modal";
 
 const RfpDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const [rfp, setRfp] = useState<RfpDocument | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -34,7 +35,7 @@ const RfpDetails: React.FC = () => {
   }
 
   return (
-     <div className="min-h-screen p-10 flex justify-center">
+    <div className="min-h-screen p-10 flex justify-center">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-4xl border-1 border-gray-200">
         {/* Title */}
         <h1 className="text-3xl font-semibold mb-6">{rfp.title}</h1>
@@ -45,10 +46,20 @@ const RfpDetails: React.FC = () => {
           <p>{rfp.description_raw}</p>
 
           {/* Structured description */}
-          <p><strong>Budget:</strong> ${rfp.description_structured.budget}</p>
-          <p><strong>Delivery Timeline:</strong> {rfp.description_structured.delivery_timeline}</p>
-          <p><strong>Payment Terms:</strong> {rfp.description_structured.payment_terms}</p>
-          <p><strong>Warranty:</strong> {rfp.description_structured.warranty}</p>
+          <p>
+            <strong>Budget:</strong> ${rfp.description_structured.budget}
+          </p>
+          <p>
+            <strong>Delivery Timeline:</strong>{" "}
+            {rfp.description_structured.delivery_timeline}
+          </p>
+          <p>
+            <strong>Payment Terms:</strong>{" "}
+            {rfp.description_structured.payment_terms}
+          </p>
+          <p>
+            <strong>Warranty:</strong> {rfp.description_structured.warranty}
+          </p>
 
           {rfp.description_structured.items?.length > 0 && (
             <div className="mt-4">
@@ -56,22 +67,29 @@ const RfpDetails: React.FC = () => {
               <ul className="list-disc list-inside space-y-2">
                 {rfp.description_structured.items.map((item, idx) => (
                   <li key={idx}>
-                    <strong>{item.type}</strong> — Quantity: {item.quantity}, Specs: {item.specs}
+                    <strong>{item.type}</strong> — Quantity: {item.quantity},
+                    Specs: {item.specs}
                   </li>
                 ))}
               </ul>
             </div>
           )}
         </div>
+        <ShareRfpModal
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          // vendors={vendors}
+          onShare={(selected) => {
+            console.log("Sharing with:", selected);
+            setIsShareOpen(false);
+          }}
+        />
 
         {/* Share Button */}
         <div className="mt-6 text-right">
           <button
             className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-              alert("RFP link copied to clipboard!");
-            }}
+            onClick={() => setIsShareOpen(true)}
           >
             Share
           </button>

@@ -4,11 +4,16 @@ import type { CreateVendorPayload, GetVendorListResponse } from "../types/types"
 
 export async function getVendorList(
   page: number = 1,
-  limit: number = 10
+  limit: number = 10,
+  search: string = ""
 ): Promise<GetVendorListResponse> {
-  const res = await api.get<GetVendorListResponse>(
-    `/api/v1/vendor?page=${page}&limit=${limit}`
-  );
+  const params = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+    search: search.trim(),
+  });
+
+  const res = await api.get<GetVendorListResponse>(`/api/v1/vendor?${params.toString()}`);
   return res.data;
 }
 

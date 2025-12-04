@@ -76,3 +76,10 @@ export interface CreateVendorResponse {
   message: string;
   data: Vendor;
 }
+
+// Props: all available vendors
+export interface ShareRfpModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onShare: (selected: Vendor[]) => void;
+}
