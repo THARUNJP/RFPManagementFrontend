@@ -4,7 +4,7 @@ import type { RfpDocument } from "../../types/types";
 
 
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 5;
 
 const RfpListPage: React.FC = () => {
   const [rfps, setRfps] = useState<RfpDocument[]>([]);
@@ -32,7 +32,7 @@ const RfpListPage: React.FC = () => {
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6">
+    <div className="max-w-4xl mx-auto mt-3 p-6">
       <h1 className="text-2xl font-semibold mb-6">All RFPs</h1>
 
       {loading ? (
