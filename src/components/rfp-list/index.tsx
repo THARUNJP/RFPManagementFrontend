@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getRfpList } from "../../service/rfp.service";
 import type { RfpDocument } from "../../types/types";
 import { ITEMS_PER_PAGE } from "../../lib/constant";
+import { Link } from "react-router-dom";
 
 const RfpListPage: React.FC = () => {
   const [rfps, setRfps] = useState<RfpDocument[]>([]);
@@ -9,18 +10,18 @@ const RfpListPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState<number>(0);
 
- const fetchRfps = async () => {
-  setLoading(true);
-  try {
-    const res = await getRfpList(page, ITEMS_PER_PAGE);
+  const fetchRfps = async () => {
+    setLoading(true);
+    try {
+      const res = await getRfpList(page, ITEMS_PER_PAGE);
 
-    // Adjust based on your real API response shape
-    setRfps(res.data);
-    setTotal(res.total);
-  } finally {
-    setLoading(false);
-  }
-};
+      // Adjust based on your real API response shape
+      setRfps(res.data);
+      setTotal(res.total);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchRfps();
@@ -37,18 +38,21 @@ const RfpListPage: React.FC = () => {
       ) : (
         <div className="space-y-4">
           {rfps?.map((rfp) => (
-            <div
+            <Link
               key={rfp.rfp_id}
-              className="border rounded-xl p-5 shadow-sm hover:shadow-md transition bg-white"
+              to={`/rfp/${rfp.rfp_id}`}
+              className="block border rounded-xl p-5 shadow-sm hover:shadow-md transition bg-white cursor-pointer"
             >
               <h2 className="text-lg font-semibold">{rfp.title}</h2>
-              <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                {/* {rfp.description} */}
-              </p>
+
+              {/* <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                {rfp.description_raw}...
+              </p> */}
+
               <p className="text-xs text-gray-400 mt-2">
                 Created: {new Date(rfp.created_at).toLocaleDateString()}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       )}
@@ -72,9 +76,7 @@ const RfpListPage: React.FC = () => {
               key={pageNum}
               onClick={() => setPage(pageNum)}
               className={`px-4 py-2 border rounded ${
-                page === pageNum
-                  ? "bg-black text-white"
-                  : "hover:bg-gray-100"
+                page === pageNum ? "bg-black text-white" : "hover:bg-gray-100"
               }`}
             >
               {pageNum}
