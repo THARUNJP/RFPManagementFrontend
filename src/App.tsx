@@ -9,6 +9,7 @@ import RfpDetails from "./components/rfp";
 import CreateVendor from "./components/create-vendor";
 import VendorDetails from "./components/vendor";
 import RfpVendorStatusPage from "./components/rfp-vendor-status";
+import RfpProposalsPage from "./components/rfp-proposal";
 
 // At last need to implement lazy load if time is there
 const App: React.FC = () => {
@@ -24,6 +25,7 @@ const App: React.FC = () => {
         <Route path="/vendor/create" element={<CreateVendor />} />
         <Route path="/vendor/:id" element={<VendorDetails />} />
         <Route path="/rfp/:id/status" element={<RfpVendorStatusPage />} />
+        <Route path="/rfp/:id/proposals" element={<RfpProposalsPage />} />
       </Routes>
     </BrowserRouter>
   );
