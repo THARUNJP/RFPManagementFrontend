@@ -59,27 +59,40 @@ const RfpDetails: React.FC = () => {
 
   return (
     <div className="min-h-screen p-10 flex justify-center">
-      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-4xl border-1 border-gray-200">
-        {/* Title */}
-        <h1 className="text-3xl font-semibold mb-6">{rfp.title}</h1>
+      <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-4xl border border-gray-200">
+        {/* Title + Right Buttons */}
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-6 gap-4">
+          <h1 className="text-3xl font-semibold">{rfp.title}</h1>
+
+          <div className="flex gap-3">
+            <button className="text-red-500 font-medium hover:underline">
+              Vendor Status
+            </button>
+
+            <button className="text-red-500 font-medium hover:underline">
+              Proposal
+            </button>
+          </div>
+        </div>
 
         {/* Human-readable RFP Content */}
         <div className="prose max-w-full mb-6 space-y-4 md:space-y-8">
-          {/* Raw description */}
           <p>{rfp.description_raw}</p>
 
-          {/* Structured description */}
           <p>
             <strong>Budget:</strong> ${rfp.description_structured.budget}
           </p>
+
           <p>
             <strong>Delivery Timeline:</strong>{" "}
             {rfp.description_structured.delivery_timeline}
           </p>
+
           <p>
             <strong>Payment Terms:</strong>{" "}
             {rfp.description_structured.payment_terms}
           </p>
+
           <p>
             <strong>Warranty:</strong> {rfp.description_structured.warranty}
           </p>
@@ -98,6 +111,8 @@ const RfpDetails: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Share Modal */}
         <ShareRfpModal
           isOpen={isShareOpen}
           onClose={() => setIsShareOpen(false)}
