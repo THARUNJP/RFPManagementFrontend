@@ -109,3 +109,34 @@ export interface RfpStatusResponse {
   message: string;
   data: RfpStatusItem[];
 }
+
+export interface ParsedProposalItem {
+  type: string;
+  specs: string;
+  quantity: number;
+  unit_price: number | null;
+  total_price: number | null;
+}
+
+export interface ProposalItem {
+  proposal_id: string;
+  rfp_id: string;
+  vendor_id: string;
+  email_id: string;
+  budget: number | null;
+  warranty: string | null;
+  total_price: number | null;
+  payment_terms: string | null;
+  delivery_timeline: string | null;
+  completeness_score: number;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+  items_summary: string; // flattened items as a string
+}
+
+export interface GetRfpProposalResponse {
+  status: boolean;
+  message: string;
+  data: ProposalItem[];
+}

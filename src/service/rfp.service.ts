@@ -3,6 +3,7 @@ import type {
   CreateRfpRequest,
   CreateRfpResponse,
   GetRfpListResponse,
+  GetRfpProposalResponse,
   RfpStatusResponse,
   SendRfpToVendorPayload,
   Vendor,
@@ -50,6 +51,15 @@ export async function getRfpStatus(
   rfpId: string
 ): Promise<RfpStatusResponse> {
   const res = await api.get<RfpStatusResponse>(`/api/v1/rfp/${rfpId}/status`);
+  return res.data;
+}
+
+export async function getRfpProposals(
+  rfpId: string
+): Promise<GetRfpProposalResponse> {
+  const res = await api.get<GetRfpProposalResponse>(
+    `/api/v1/rfp/${rfpId}/proposal`
+  );
   return res.data;
 }
 
