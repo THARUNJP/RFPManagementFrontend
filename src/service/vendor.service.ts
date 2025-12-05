@@ -1,5 +1,5 @@
 import api from "../clientApi/clientApi";
-import type { CreateVendorPayload, GetVendorListResponse } from "../types/types";
+import type { CreateVendorPayload, CreateVendorResponse, GetVendorListResponse } from "../types/types";
 
 
 export async function getVendorList(
@@ -21,5 +21,12 @@ export async function createVendor(
   payload: CreateVendorPayload
 ): Promise<CreateVendorPayload> {
   const res = await api.post<CreateVendorPayload>("/api/v1/vendor", payload);
+  return res.data;
+}
+
+export async function getVendorById(
+  vendorId: string
+): Promise<CreateVendorResponse> {
+  const res = await api.get<CreateVendorResponse>(`/api/v1/vendor/${vendorId}`);
   return res.data;
 }

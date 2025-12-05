@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import type { Vendor } from "../../types/types";
 import { getVendorList } from "../../service/vendor.service";
 import { ITEMS_PER_PAGE } from "../../lib/constant";
-
-
-
-
+import { Link } from "react-router-dom";
 
 const VendorListPage: React.FC = () => {
   const [vendors, setVendors] = useState<Vendor[]>([]);
@@ -41,21 +38,29 @@ const VendorListPage: React.FC = () => {
       ) : (
         <div className="space-y-4">
           {vendors?.map((vendor) => (
-            <div
+            <Link
+              to={`/vendor/${vendor.vendor_id}`}
               key={vendor.vendor_id}
-              className="border rounded-xl p-5 shadow-sm hover:shadow-md transition bg-white"
+              className="block" // this restores spacing!
             >
-              <h2 className="text-lg font-semibold">{vendor.name}</h2>
-              <p className="text-sm text-gray-600 mt-1">
-                Email: {vendor.contact_email}
-              </p>
-              {vendor.phone && (
-                <p className="text-sm text-gray-600 mt-1">Phone: {vendor.phone}</p>
-              )}
-              <p className="text-xs text-gray-400 mt-2">
-                Created: {new Date(vendor.created_at).toLocaleDateString()}
-              </p>
-            </div>
+              <div className="border rounded-xl p-5 shadow-sm hover:shadow-md transition bg-white cursor-pointer">
+                <h2 className="text-lg font-semibold">{vendor.name}</h2>
+
+                <p className="text-sm text-gray-600 mt-1">
+                  Email: {vendor.contact_email}
+                </p>
+
+                {vendor.phone && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    Phone: {vendor.phone}
+                  </p>
+                )}
+
+                <p className="text-xs text-gray-400 mt-2">
+                  Created: {new Date(vendor.created_at).toLocaleDateString()}
+                </p>
+              </div>
+            </Link>
           ))}
         </div>
       )}
