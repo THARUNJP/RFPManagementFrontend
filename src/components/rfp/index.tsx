@@ -65,12 +65,12 @@ const RfpDetails: React.FC = () => {
           <h1 className="text-3xl font-semibold">{rfp.title}</h1>
 
           <div className="flex gap-3">
-            <button className="text-red-500 font-medium hover:underline">
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition hover:bg-blue-700 cursor-pointer">
               Vendor Status
             </button>
 
-            <button className="text-red-500 font-medium hover:underline">
-              Proposal
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition hover:bg-blue-700 cursor-pointer">
+              Proposals
             </button>
           </div>
         </div>

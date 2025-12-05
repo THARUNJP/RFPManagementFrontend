@@ -3,6 +3,7 @@ import type {
   CreateRfpRequest,
   CreateRfpResponse,
   GetRfpListResponse,
+  RfpStatusResponse,
   SendRfpToVendorPayload,
   Vendor,
 } from "../types/types";
@@ -44,3 +45,11 @@ export async function sendRfpToVendor(
 
   return res.data;
 }
+
+export async function getRfpStatus(
+  rfpId: string
+): Promise<RfpStatusResponse> {
+  const res = await api.get<RfpStatusResponse>(`/api/v1/rfp/${rfpId}/status`);
+  return res.data;
+}
+

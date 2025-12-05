@@ -89,3 +89,23 @@ export interface SendRfpToVendorPayload {
   message: string;
   rfp_id: string;
 }
+
+export interface RfpStatusItem {
+  id: string;
+  rfp_id: string;
+  vendor_id: string;
+  email_status: string;
+  sent_at: string;
+  created_at: string;
+  updated_at: string;
+  is_active: boolean;
+  name: string;
+  contact_email: string;
+  phone: string;
+}
+
+export interface RfpStatusResponse {
+  status: boolean;
+  message: string;
+  data: RfpStatusItem[];
+}
