@@ -133,6 +133,9 @@ export interface ProposalItem {
   updated_at: string;
   is_active: boolean;
   items_summary: string; // flattened items as a string
+  vendor_name: string;
+  vendor_contact_email: string;
+  vendor_phone: string;
 }
 
 export interface GetRfpProposalResponse {
