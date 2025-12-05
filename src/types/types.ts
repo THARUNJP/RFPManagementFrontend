@@ -10,6 +10,15 @@ export interface StructuredItem {
   specs: string;
   quantity: number;
 }
+export interface StructuredRFP {
+  title: string;
+  description: string;
+  items: { type: string; quantity: number; specs: string }[];
+  budget: number;
+  delivery_timeline: string;
+  payment_terms: string;
+  warranty: string;
+}
 
 // Structured Description
 export interface StructuredDescription {

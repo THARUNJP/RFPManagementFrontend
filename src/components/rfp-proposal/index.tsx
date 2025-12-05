@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { ProposalItem } from "../../types/types";
 import { getRfpProposals } from "../../service/rfp.service";
-
+import type { ProposalItem } from "../../types/types";
 
 const RfpProposalsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +13,7 @@ const RfpProposalsPage: React.FC = () => {
     if (!id) return;
 
     async function fetchProposals() {
-      if(!id) return;
+      if(!id) return
       try {
         setLoading(true);
         const res = await getRfpProposals(id);
@@ -32,6 +31,14 @@ const RfpProposalsPage: React.FC = () => {
   if (loading) return <div className="p-6 text-gray-700">Loading...</div>;
   if (error) return <div className="p-6 text-red-500">{error}</div>;
 
+  // Sort proposals: highest completeness_score first
+  const sortedProposals = [...proposals].sort(
+    (a, b) => (b.completeness_score || 0) - (a.completeness_score || 0)
+  );
+
+  const recommendedId =
+    sortedProposals.length > 0 ? sortedProposals[0].proposal_id : null;
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -44,7 +51,7 @@ const RfpProposalsPage: React.FC = () => {
         </button>
       </div>
 
-      {proposals.length === 0 ? (
+      {sortedProposals.length === 0 ? (
         <div className="mt-10 flex flex-col items-center text-center">
           <div className="text-4xl mb-3">📄</div>
           <p className="text-gray-500 text-lg font-medium">
@@ -70,12 +77,27 @@ const RfpProposalsPage: React.FC = () => {
               </thead>
 
               <tbody className="text-gray-900">
-                {proposals.map((proposal) => (
+                {sortedProposals.map((proposal) => (
                   <tr
                     key={proposal.proposal_id}
-                    className="border-b border-gray-200 hover:bg-gray-100 transition"
+                    className={`border-b border-gray-200 transition ${
+                      proposal.proposal_id === recommendedId
+                        ? "bg-blue-50"
+                        : "hover:bg-gray-100"
+                    }`}
                   >
-                    <td className="p-4">{proposal.vendor_name}</td>
+                    <td className="p-4 font-medium">
+                      <div className="flex items-center gap-2">
+                        {proposal.vendor_name}
+
+                        {proposal.proposal_id === recommendedId && (
+                          <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                            Recommended
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
                     <td className="p-4">{proposal.vendor_contact_email}</td>
                     <td className="p-4">{proposal.vendor_phone}</td>
                     <td className="p-4">{proposal.items_summary}</td>
@@ -83,7 +105,10 @@ const RfpProposalsPage: React.FC = () => {
                     <td className="p-4">{proposal.payment_terms}</td>
                     <td className="p-4">{proposal.delivery_timeline}</td>
                     <td className="p-4">{proposal.warranty}</td>
-                    <td className="p-4">{proposal.completeness_score}</td>
+                    <td className="p-4 font-semibold">
+                      {proposal.completeness_score}
+                      {/* {proposal.proposal_id === recommendedId && " / 100"} */}
+                    </td>
                   </tr>
                 ))}
               </tbody>
