@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import type { RfpDocument, Vendor } from "../../types/types";
 import { getRfpById, sendRfpToVendor } from "../../service/rfp.service";
 import { ShareRfpModal } from "../../lib/modal";
@@ -65,13 +65,19 @@ const RfpDetails: React.FC = () => {
           <h1 className="text-3xl font-semibold">{rfp.title}</h1>
 
           <div className="flex gap-3">
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition hover:bg-blue-700 cursor-pointer">
+            <Link
+              to="status"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition hover:bg-blue-700 cursor-pointer inline-block"
+            >
               Vendor Status
-            </button>
+            </Link>
 
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition hover:bg-blue-700 cursor-pointer">
+            <Link
+              to="proposals"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition hover:bg-blue-700 cursor-pointer inline-block"
+            >
               Proposals
-            </button>
+            </Link>
           </div>
         </div>
 
