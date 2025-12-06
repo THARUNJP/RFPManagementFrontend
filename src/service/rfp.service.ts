@@ -1,5 +1,6 @@
 import api from "../clientApi/clientApi";
 import type {
+  AIRecommendationResponse,
   CreateRfpRequest,
   CreateRfpResponse,
   GetRfpListResponse,
@@ -47,9 +48,7 @@ export async function sendRfpToVendor(
   return res.data;
 }
 
-export async function getRfpStatus(
-  rfpId: string
-): Promise<RfpStatusResponse> {
+export async function getRfpStatus(rfpId: string): Promise<RfpStatusResponse> {
   const res = await api.get<RfpStatusResponse>(`/api/v1/rfp/${rfpId}/status`);
   return res.data;
 }
@@ -63,3 +62,11 @@ export async function getRfpProposals(
   return res.data;
 }
 
+export async function getAIRecommendation(
+  rfpId: string
+): Promise<AIRecommendationResponse> {
+  const res = await api.get<AIRecommendationResponse>(
+    `/api/v1/rfp/${rfpId}/ai-recommendations`
+  );
+  return res.data;
+}

@@ -152,3 +152,16 @@ export interface GetRfpProposalResponse {
   message: string;
   data: ProposalItem[];
 }
+
+export interface AIRecommendation {
+  message: string;
+  best_proposal_id: string;
+  reason: string;
+  vendor: Vendor;
+}
+
+export interface AIRecommendationResponse {
+  status: boolean;
+  message: string;
+  recomendation: AIRecommendation;
+}
