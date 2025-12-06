@@ -104,7 +104,7 @@ const RfpProposalsPage: React.FC = () => {
                   <th className="p-4 text-left">Email</th>
                   <th className="p-4 text-left">Phone</th>
                   <th className="p-4 text-left">Items</th>
-                  <th className="p-4 text-left">Budget</th>
+                  <th className="p-4 text-left">Price</th>
                   <th className="p-4 text-left">Payment Terms</th>
                   <th className="p-4 text-left">Delivery Timeline</th>
                   <th className="p-4 text-left">Warranty</th>
@@ -150,46 +150,50 @@ const RfpProposalsPage: React.FC = () => {
       )}
 
       {/* AI Recommendation Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-xl shadow-xl w-11/12 max-w-lg p-6 relative">
-            <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
-              onClick={() => setShowModal(false)}
-            >
-              ×
-            </button>
+     {showModal && (
+     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white rounded-xl shadow-xl w-11/12 max-w-lg p-6 relative">
+      <button
+        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+        onClick={() => setShowModal(false)}
+      >
+        ×
+      </button>
 
-            {aiLoading ? (
-              <div className="flex flex-col items-center justify-center gap-4 py-10">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-b-4 border-gray-200"></div>
-                <p className="text-gray-700 text-center font-medium">
-                  Fetching AI Recommendation… This may take 1–2 minutes, please
-                  wait.
-                </p>
-              </div>
-            ) : aiResult ? (
-              <div className="flex flex-col gap-4">
-                <h2 className="text-xl font-semibold text-gray-900">
-                  Best Proposal: {aiResult.best_proposal_id}
-                </h2>
-                <p className="text-gray-700">{aiResult.reason}</p>
+      <p className="text-sm text-gray-500 text-center mb-4">
+        AI-based recommendation. Kindly review the recommendation carefully before proceeding.
+      </p>
 
-                <div className="mt-4 border-t pt-4">
-                  <h3 className="font-medium text-gray-900">Vendor Details</h3>
-                  <p>Name: {aiResult.vendor.name}</p>
-                  <p>Email: {aiResult.vendor.contact_email}</p>
-                  <p>Phone: {aiResult.vendor.phone}</p>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-700 text-center">
-                No recommendation found.
-              </p>
-            )}
+      {aiLoading ? (
+        <div className="flex flex-col items-center justify-center gap-4 py-10">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-b-4 border-gray-200"></div>
+          <p className="text-gray-700 text-center font-medium">
+            Fetching AI Recommendation… This may take 1–2 minutes. Please wait.
+          </p>
+        </div>
+      ) : aiResult ? (
+        <div className="flex flex-col gap-6">
+          <h2 className="text-2xl font-semibold text-gray-900 text-center">
+            Best Proposal: {aiResult.best_proposal_id}
+          </h2>
+          <p className="text-gray-700 text-center">{aiResult.reason}</p>
+
+          <div className="mt-6 border-t pt-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">Vendor Details</h3>
+            <p><span className="font-medium">Name:</span> {aiResult.vendor.name}</p>
+            <p><span className="font-medium">Email:</span> {aiResult.vendor.contact_email}</p>
+            <p><span className="font-medium">Phone:</span> {aiResult.vendor.phone}</p>
           </div>
         </div>
+      ) : (
+        <p className="text-gray-700 text-center py-10">
+          No recommendation found.
+        </p>
       )}
+    </div>
+    </div>
+       )}
+
     </div>
   );
 };
