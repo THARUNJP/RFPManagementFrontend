@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getRfpProposals } from "../../service/rfp.service";
-import type { ProposalItem } from "../../types/types";
+import {
+  getAIRecommendation,
+  getRfpProposals,
+} from "../../service/rfp.service";
+import type { AIRecommendation, ProposalItem } from "../../types/types";
 
 const RfpProposalsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -9,16 +12,20 @@ const RfpProposalsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!id) return;
+  // Modal state
+  const [showModal, setShowModal] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiResult, setAiResult] = useState<AIRecommendation | null>(null);
 
+  useEffect(() => {
     async function fetchProposals() {
-      if(!id) return
+      if (!id) return;
+
+      setLoading(true);
       try {
-        setLoading(true);
         const res = await getRfpProposals(id);
         setProposals(res.data);
-      } catch (err) {
+      } catch {
         setError("Failed to fetch proposals");
       } finally {
         setLoading(false);
@@ -28,8 +35,31 @@ const RfpProposalsPage: React.FC = () => {
     fetchProposals();
   }, [id]);
 
-  if (loading) return <div className="p-6 text-gray-700">Loading...</div>;
-  if (error) return <div className="p-6 text-red-500">{error}</div>;
+  const handleAIRecommendation = async () => {
+    if (!id) return;
+    setShowModal(true);
+    setAiLoading(true);
+    setAiResult(null);
+
+    try {
+      const res = await getAIRecommendation(id);
+      setAiResult(res.recomendation);
+    } catch (err) {
+      setAiResult({
+        message: "Failed to fetch AI recommendation",
+        best_proposal_id: "",
+        reason: (err as Error).message,
+        vendor: {
+          vendor_id: "",
+          name: "",
+          contact_email: "",
+          phone: "",
+        },
+      });
+    } finally {
+      setAiLoading(false);
+    }
+  };
 
   // Sort proposals: highest completeness_score first
   const sortedProposals = [...proposals].sort(
@@ -39,6 +69,9 @@ const RfpProposalsPage: React.FC = () => {
   const recommendedId =
     sortedProposals.length > 0 ? sortedProposals[0].proposal_id : null;
 
+  if (loading) return <div className="p-6 text-gray-700">Loading...</div>;
+  if (error) return <div className="p-6 text-red-500">{error}</div>;
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
@@ -46,7 +79,10 @@ const RfpProposalsPage: React.FC = () => {
           Proposals for RFP: {id}
         </h1>
 
-        <button className="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+        <button
+          onClick={handleAIRecommendation}
+          className="bg-blue-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+        >
           AI Recommendation
         </button>
       </div>
@@ -86,16 +122,13 @@ const RfpProposalsPage: React.FC = () => {
                         : "hover:bg-gray-100"
                     }`}
                   >
-                    <td className="p-4 font-medium">
-                      <div className="flex items-center gap-2">
-                        {proposal.vendor_name}
-
-                        {proposal.proposal_id === recommendedId && (
-                          <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
-                            Recommended
-                          </span>
-                        )}
-                      </div>
+                    <td className="p-4 font-medium flex items-center gap-2">
+                      {proposal.vendor_name}
+                      {proposal.proposal_id === recommendedId && (
+                        <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">
+                          Recommended
+                        </span>
+                      )}
                     </td>
 
                     <td className="p-4">{proposal.vendor_contact_email}</td>
@@ -107,12 +140,53 @@ const RfpProposalsPage: React.FC = () => {
                     <td className="p-4">{proposal.warranty}</td>
                     <td className="p-4 font-semibold">
                       {proposal.completeness_score}
-                      {/* {proposal.proposal_id === recommendedId && " / 100"} */}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* AI Recommendation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-xl shadow-xl w-11/12 max-w-lg p-6 relative">
+            <button
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold"
+              onClick={() => setShowModal(false)}
+            >
+              ×
+            </button>
+
+            {aiLoading ? (
+              <div className="flex flex-col items-center justify-center gap-4 py-10">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-b-4 border-gray-200"></div>
+                <p className="text-gray-700 text-center font-medium">
+                  Fetching AI Recommendation… This may take 1–2 minutes, please
+                  wait.
+                </p>
+              </div>
+            ) : aiResult ? (
+              <div className="flex flex-col gap-4">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Best Proposal: {aiResult.best_proposal_id}
+                </h2>
+                <p className="text-gray-700">{aiResult.reason}</p>
+
+                <div className="mt-4 border-t pt-4">
+                  <h3 className="font-medium text-gray-900">Vendor Details</h3>
+                  <p>Name: {aiResult.vendor.name}</p>
+                  <p>Email: {aiResult.vendor.contact_email}</p>
+                  <p>Phone: {aiResult.vendor.phone}</p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-gray-700 text-center">
+                No recommendation found.
+              </p>
+            )}
           </div>
         </div>
       )}

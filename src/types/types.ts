@@ -157,7 +157,7 @@ export interface AIRecommendation {
   message: string;
   best_proposal_id: string;
   reason: string;
-  vendor: Vendor;
+  vendor: Omit<Vendor, "created_at" | "updated_at" | "is_active">;
 }
 
 export interface AIRecommendationResponse {
